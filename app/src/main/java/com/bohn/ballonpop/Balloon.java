@@ -27,8 +27,7 @@ public class Balloon extends GameObject {
         paint.setColor(Color.BLUE);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPath(getPath2D(), paint);
-        //canvas.drawCircle(super.x - this.r, super.y - this.r, this.r, paint);
-        //canvas.drawArc(super.x - this.r, super.y-r,10,10,10,23, false, paint);
+
 
     }
 
