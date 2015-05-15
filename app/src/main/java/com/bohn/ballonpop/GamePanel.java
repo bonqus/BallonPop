@@ -70,7 +70,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder){
         bg = new Background(WIDTH, HEIGHT);
         balloons = new ArrayList<Balloon>();
-        needle = new Needle();
         //we can safely start the game loop
         thread.setRunning(true);
         thread.start();
