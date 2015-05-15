@@ -17,11 +17,12 @@ import java.util.Random;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-    public static final int WIDTH = 1920;
-    public static final int HEIGHT = 1080;
+    public static final int WIDTH = 1080;
+    public static final int HEIGHT = 1920;
     public static final int MOVESPEED = -5;
     private ArrayList<Balloon> balloons;
     private Background bg;
+    private Needle needle;
     private long balloonStartTime;
     private long balloonSpawn = 0;
     private Random rand = new Random();
@@ -69,6 +70,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder){
         bg = new Background(WIDTH, HEIGHT);
         balloons = new ArrayList<Balloon>();
+        needle = new Needle();
         //we can safely start the game loop
         thread.setRunning(true);
         thread.start();
@@ -89,6 +91,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void update() {
         addBalloon();
 
+
         for(Balloon b: balloons) {
             b.update();
         }
@@ -101,9 +104,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         // spawn balloon hvert andet sekund.
         if (balloonElapsen > balloonSpawn) {
             int spawn = rand.nextInt(WIDTH);
-            balloons.add(new Balloon(spawn, HEIGHT+10));
+            balloons.add(new Balloon(spawn, HEIGHT+200));
             balloonStartTime = System.nanoTime();
-            balloonSpawn = (rand.nextInt(2)+1)*1000;
+            balloonSpawn = (rand.nextInt(2)+2)*1000;
         }
     }
 
@@ -129,6 +132,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             for (Balloon b: balloons) {
                 b.draw(canvas);
             }
+            needle.draw(canvas);
 
             canvas.restoreToCount(savedState);
         }
