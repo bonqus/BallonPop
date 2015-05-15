@@ -5,6 +5,6 @@ package com.bohn.ballonpop;
  */
 public class Needle extends GameObject {
     public Needle () {
-        this.x =
+
     }
 }
