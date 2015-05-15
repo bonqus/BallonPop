@@ -25,7 +25,7 @@ public class Needle extends GameObject {
         int eventAction = event.getAction();
 
         float x = event.getX();
-        float y = event.getY();
+        float ys = event.getY();
 
         if (eventAction == MotionEvent.ACTION_DOWN)
         {
