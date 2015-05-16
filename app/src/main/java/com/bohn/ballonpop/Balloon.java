@@ -23,7 +23,7 @@ public class Balloon extends GameObject {
     }
 
     public void update() {
-        super.x = super.x+(int)((Math.sin(super.y/100))*2);
+        //super.x = super.x+(int)((Math.sin((double)super.y/100))*2);
         super.y -= 5;
     }
 
