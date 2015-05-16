@@ -18,8 +18,8 @@ import java.util.Random;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-    public static final int WIDTH = 1080;
-    public static final int HEIGHT = 1920;
+    public static final int WIDTH = 1440;
+    public static final int HEIGHT = 852;
     public static final int MOVESPEED = -5;
     private ArrayList<Balloon> balloons;
     private Background bg;
@@ -126,8 +126,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         final float scaleFactorX = getWidth()/(WIDTH*1.f);
         final float scaleFactorY = getHeight()/(HEIGHT*1.f);
-
-
         if(canvas != null) {
             final int savedState = canvas.save();
             canvas.scale(scaleFactorX, scaleFactorY);
