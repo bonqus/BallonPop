@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,6 +24,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private ArrayList<Balloon> balloons;
     private Background bg;
     private Needle needle;
+    private boolean isDown = false;
     private long balloonStartTime;
     private long balloonSpawn = 0;
     private Random rand = new Random();
@@ -70,6 +72,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder){
         bg = new Background(WIDTH, HEIGHT);
         balloons = new ArrayList<Balloon>();
+        needle = new Needle();
         //we can safely start the game loop
         thread.setRunning(true);
         thread.start();
@@ -79,9 +82,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            double angle = needle.getAngle(event.getX(), event.getY());
+            needle.setAngle(angle);
             return true;
         }
         if (event.getAction() == MotionEvent.ACTION_UP) {
+            isDown = false;
             return true;
         }
         return super.onTouchEvent(event);
@@ -89,7 +95,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update() {
         addBalloon();
-
 
         for(Balloon b: balloons) {
             b.update();
@@ -125,7 +130,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         if(canvas != null) {
             final int savedState = canvas.save();
-            canvas.scale(scaleFactorX,scaleFactorY);
+            canvas.scale(scaleFactorX, scaleFactorY);
 
             bg.draw(canvas);
             for (Balloon b: balloons) {
@@ -136,6 +141,5 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.restoreToCount(savedState);
         }
     }
-
 
 }
