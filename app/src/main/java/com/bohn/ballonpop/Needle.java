@@ -24,7 +24,7 @@ public class Needle extends GameObject {
 
     public Needle() {
         angle = Math.PI/2;
-        radius = 500;
+        radius = 250;
         cx = GamePanel.WIDTH / 2;
         cy = GamePanel.HEIGHT / 2;
         x = cx + radius * Math.cos(angle);
@@ -41,6 +41,13 @@ public class Needle extends GameObject {
         canvas.drawLine((int)x, (int)y, cx, cy, paint);
     }
 
+    public void touchDown(float x, float y){
+        if ((Math.pow(x - this.x,2) + Math.pow(y-this.y,2)) < Math.pow(140, 2)) {
+            setAngle(getAngle(x, y));
+        }
+    }
+
+
     public double getAngle(float x, float y){
         double xDiff = cx - x;
         double yDiff = cy - y;
@@ -54,9 +61,4 @@ public class Needle extends GameObject {
         //System.out.print("X: " + x + "\n");
         //System.out.print("Y: " + y + "\n");
     }
-    public void onTouch(int tx, int ty){
-            angle++;
-            System.out.print(angle);
-
-        }
 }

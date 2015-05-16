@@ -18,8 +18,8 @@ import java.util.Random;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-    public static final int WIDTH = 1440;
-    public static final int HEIGHT = 852;
+    public static final int WIDTH = 1080;
+    public static final int HEIGHT = 1920;
     public static final int MOVESPEED = -5;
     private ArrayList<Balloon> balloons;
     private Background bg;
@@ -81,13 +81,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            needle.touchDown(event.getX(), event.getY());
+            return true;
+        }
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            double angle = needle.getAngle(event.getX(), event.getY());
-            needle.setAngle(angle);
+            needle.touchDown(event.getX(), event.getY());
             return true;
         }
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            isDown = false;
             return true;
         }
         return super.onTouchEvent(event);
