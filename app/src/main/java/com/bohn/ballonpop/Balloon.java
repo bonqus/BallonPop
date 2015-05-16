@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 
+
 import java.util.Random;
 
 /**
@@ -18,6 +19,8 @@ public class Balloon extends GameObject {
     public Balloon (int x, int y) {
         super.x = x;
         super.y = y;
+        super.width = 100;
+        super.height = 100;
         Random rand = new Random();
         xStart = rand.nextInt(GamePanel.WIDTH);
         //color = Color.rgb(rand.nextInt(255),rand.nextInt(255),rand.nextInt(255));
@@ -53,9 +56,6 @@ public class Balloon extends GameObject {
         //Draw Balloon
         canvas.drawCircle(x,y,4,paint);
         canvas.drawPath(getPath2D(), paint);
-
-
-
 
     }
 
