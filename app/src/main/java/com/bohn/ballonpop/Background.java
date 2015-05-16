@@ -21,8 +21,9 @@ public class Background {
 
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setColor(Color.GRAY);
+        paint.setColor(Color.rgb(199,233,245));
         paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
         canvas.drawRect(0,0,this.w,this.h, paint);
 
     }
