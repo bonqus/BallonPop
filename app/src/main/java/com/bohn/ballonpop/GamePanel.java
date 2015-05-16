@@ -1,10 +1,12 @@
 package com.bohn.ballonpop;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -138,6 +140,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void drawScore(Canvas canvas) {
+        //AssetManager am = context.getApplicationContext().getAssets();
+        //Typeface tf = Typeface.createFromAsset(am, String.format(Locale.US, "fonts/%s", "abc.ttf"));
+
+
+
+       // Typeface tf = Typeface.createFromAsset(R.getAssets(),fonts.RalewayThin.ttf);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);
