@@ -1,12 +1,15 @@
 package com.bohn.ballonpop;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -28,6 +31,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private long balloonStartTime;
     private long balloonSpawn = 0;
     private Random rand = new Random();
+
+    // gør mindre for højere ballon spawnrate
+    private int level = 4;
+
+    public static int SCORE = 0;
 
     //Increase, to slow down difficulty progression speed.
     private int progressDenom = 20;
@@ -98,10 +106,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update() {
+
+
         addBalloon();
 
-        for(Balloon b: balloons) {
-            b.update();
+        for (int i = balloons.size()-1; i > 0; i--) {
+            balloons.get(i).update();
+            if(balloons.get(i).getY() < -500) {
+                balloons.remove(i);
+            }
         }
 
     }
@@ -111,10 +124,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         long balloonElapsen = (System.nanoTime() - balloonStartTime)/1000000;
         // spawn balloon hvert andet sekund.
         if (balloonElapsen > balloonSpawn) {
+            SCORE++;
+            if(SCORE % 10 == 0 && level != 0) {
+                level -= 1;
+            }
             int spawn = rand.nextInt(WIDTH);
             balloons.add(new Balloon(spawn, HEIGHT+200));
             balloonStartTime = System.nanoTime();
-            balloonSpawn = (rand.nextInt(2)+2)*1000;
+            balloonSpawn = (rand.nextInt(2)+level)*1000;
         }
     }
 
@@ -126,6 +143,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         return false;
     }
 
+    public void drawScore(Canvas canvas) {
+        //AssetManager am = context.getApplicationContext().getAssets();
+        //Typeface tf = Typeface.createFromAsset(am, String.format(Locale.US, "fonts/%s", "abc.ttf"));
+
+
+
+       // Typeface tf = Typeface.createFromAsset(R.getAssets(),fonts.RalewayThin.ttf);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(30);
+        canvas.drawText("Score: " + this.SCORE,this.WIDTH-150,50, paint);
+    }
+
     @Override
     public void draw(Canvas canvas) {
         final float scaleFactorX = getWidth()/(WIDTH*1.f);
@@ -133,13 +164,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if(canvas != null) {
             final int savedState = canvas.save();
             canvas.scale(scaleFactorX, scaleFactorY);
-
             bg.draw(canvas);
             for (Balloon b: balloons) {
                 b.draw(canvas);
             }
             needle.draw(canvas);
 
+            drawScore(canvas);
             canvas.restoreToCount(savedState);
         }
     }
