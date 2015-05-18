@@ -21,8 +21,8 @@ import java.util.Random;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-    public static final int WIDTH = 750;
-    public static final int HEIGHT = 1800;
+    public static final int WIDTH = 1440;
+    public static final int HEIGHT = 852;
     public static final int MOVESPEED = -5;
     private ArrayList<Balloon> balloons;
     private Background bg;
