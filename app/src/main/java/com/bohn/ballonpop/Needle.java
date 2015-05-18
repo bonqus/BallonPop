@@ -29,7 +29,7 @@ public class Needle extends GameObject {
 
     public Needle() {
         angle = Math.PI/2;
-        radius = 250;
+        radius = 100;
         cx = GamePanel.WIDTH / 2;
         cy = GamePanel.HEIGHT / 2;
         x = cx + radius * Math.cos(angle);
@@ -38,9 +38,9 @@ public class Needle extends GameObject {
     }
 
     public void draw(Canvas canvas) {
-        setLinePoint(500);
+        setLinePoint(300);
         paint.setColor(Color.GREEN);
-        canvas.drawCircle((int)x, (int)y, 80, paint);
+        canvas.drawCircle((int)x, (int)y, 40, paint);
         paint.setColor(Color.BLUE);
         canvas.drawCircle(cx, cy, 20, paint);
         paint.setColor(Color.BLACK);
@@ -52,20 +52,22 @@ public class Needle extends GameObject {
         moveangle = getAngle(prevx, prevy, x, y);
         quadrant = getQuadrant(revangle, moveangle);
         newradius = (int) getRadius(x, y, cx, cy);
+        if (newradius < 50){
+            newradius = 50;
+        }
+        else if (newradius > 150){
+            newradius = 150;
+        }
 
-        if ((Math.pow(x - this.x,2) + Math.pow(y-this.y,2)) < Math.pow(140, 2)) {
+        if ((Math.pow(this.x - x,2) + Math.pow(this.y - y,2)) < Math.pow(100, 2)) {
             if (quadrant == 1 || quadrant == 3){
                 setAngle(getAngle(x, y, cx, cy));
             }
             else if (quadrant == 0){
-                if (newradius > 200){
                     setRadius(newradius);
-                }
             }
             else if (quadrant == 2){
-                if (newradius < 300){
                     setRadius(newradius);
-                }
             }
 
         }

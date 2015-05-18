@@ -53,7 +53,7 @@ public class MainThread extends Thread {
 
             timeMillis = (System.nanoTime() - startTime)/1000000;
             waitTime = targetTime-timeMillis;
-
+            System.out.print(waitTime);
             try {
                 this.sleep(waitTime);
             } catch(Exception e) {}
