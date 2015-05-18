@@ -110,4 +110,12 @@ public class Needle extends GameObject {
         }
         return 0;
     }
+
+    public int getLx() {
+        return (int)this.lx;
+    }
+
+    public int getLy() {
+        return (int)this.ly;
+    }
 }

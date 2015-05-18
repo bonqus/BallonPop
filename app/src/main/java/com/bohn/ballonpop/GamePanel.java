@@ -115,6 +115,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if(balloons.get(i).getY() < -500) {
                 balloons.remove(i);
             }
+            if( collision(balloons.get(i), needle.getLx(), needle.getLy())){
+                balloons.remove(i);
+            }
+
         }
 
     }
@@ -136,8 +140,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-    public boolean collision (GameObject a, GameObject b) {
-        if (Rect.intersects(a.getRectangle(),b.getRectangle())) {
+    public boolean collision (GameObject a, int x, int y) {
+        Rect b = new Rect(x,y, x+1, y+1);
+        if (Rect.intersects(a.getRectangle(),b)) {
             return true;
         }
         return false;
