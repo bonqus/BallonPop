@@ -1,12 +1,10 @@
 package com.bohn.ballonpop;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -25,6 +23,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static final int HEIGHT = 852;
     public static final int MOVESPEED = -5;
     private ArrayList<Balloon> balloons;
+    private ArrayList<Explosion> explosions;
     private Background bg;
     private Needle needle;
     private boolean isDown = false;
@@ -80,6 +79,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder){
         bg = new Background(WIDTH, HEIGHT);
         balloons = new ArrayList<Balloon>();
+        explosions = new ArrayList<Explosion>();
         needle = new Needle();
         //we can safely start the game loop
         thread.setRunning(true);
@@ -110,12 +110,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         addBalloon();
 
-        for (int i = balloons.size()-1; i > 0; i--) {
+        for (int i = balloons.size()-1; i >= 0; i--) {
             balloons.get(i).update();
-            if(balloons.get(i).getY() < -500) {
+            if(balloons.get(i).getY() < -200) {
                 balloons.remove(i);
             }
             if( collision(balloons.get(i), needle.getLx(), needle.getLy())){
+                explosions.add(new Explosion(balloons.get(i).getX(), balloons.get(i).getY()));
                 balloons.remove(i);
                 SCORE++;
                 if(SCORE % 10 == 0 && level != 0) {
@@ -123,6 +124,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
 
+        }
+        if (explosions.size() > 0) {
+            for(int i = explosions.size()-1; i >= 0; i--) {
+                explosions.get(i).update();
+                if (explosions.get(i).shouldRemove()) {
+                    explosions.remove(i);
+                }
+        }
         }
 
     }
@@ -172,6 +181,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             bg.draw(canvas);
             for (Balloon b: balloons) {
                 b.draw(canvas);
+            }
+            if (explosions.size() > 0) {
+                for (Explosion e : explosions) {
+                    e.draw(canvas);
+                }
             }
             needle.draw(canvas);
 
