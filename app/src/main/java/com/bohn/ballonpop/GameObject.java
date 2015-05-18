@@ -62,6 +62,6 @@ public abstract class GameObject {
     }
 
     public Rect getRectangle() {
-        return new Rect(this.x,this.y, this.x + this.width, this.y + this.height);
+        return new Rect(this.x - this.width,this.y - this.height, this.x + this.width, this.y);
     }
 }

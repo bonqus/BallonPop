@@ -19,8 +19,8 @@ public class Balloon extends GameObject {
     public Balloon (int x, int y) {
         super.x = x;
         super.y = y;
-        super.width = 100;
-        super.height = 100;
+        super.width = 45;
+        super.height = 110;
         Random rand = new Random();
         xStart = rand.nextInt(GamePanel.WIDTH);
         //color = Color.rgb(rand.nextInt(255),rand.nextInt(255),rand.nextInt(255));
@@ -44,13 +44,14 @@ public class Balloon extends GameObject {
         paint.setAntiAlias(true);
         Path path = new Path();
         path.moveTo(x, y);
-        path.cubicTo(xStart+(int)balloonMovement(super.y + dy * 30), y + 70, xStart+(int)balloonMovement(super.y + dy * 20), y + 70, xStart+(int)balloonMovement(super.y + dy * 80), y + 118);
+        path.cubicTo(xStart + (int) balloonMovement(super.y + dy * 30), y + 70, xStart + (int) balloonMovement(super.y + dy * 20), y + 70, xStart + (int) balloonMovement(super.y + dy * 80), y + 118);
 
         //Draw string
         paint.setStyle(Paint.Style.STROKE);
         canvas.drawPath(path, paint);
 
-
+        //draw hitbox
+        //canvas.drawRect(this.x - this.width, this.y, this.x + this.width, this.y - this.height,paint);
 
         paint.setStyle(Paint.Style.FILL);
         //Draw Balloon

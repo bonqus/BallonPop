@@ -117,6 +117,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
             if( collision(balloons.get(i), needle.getLx(), needle.getLy())){
                 balloons.remove(i);
+                SCORE++;
+                if(SCORE % 10 == 0 && level != 0) {
+                    level -= 1;
+                }
             }
 
         }
@@ -128,10 +132,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         long balloonElapsen = (System.nanoTime() - balloonStartTime)/1000000;
         // spawn balloon hvert andet sekund.
         if (balloonElapsen > balloonSpawn) {
-            SCORE++;
-            if(SCORE % 10 == 0 && level != 0) {
-                level -= 1;
-            }
             int spawn = rand.nextInt(WIDTH);
             balloons.add(new Balloon(spawn, HEIGHT+200));
             balloonStartTime = System.nanoTime();
