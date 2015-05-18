@@ -59,12 +59,12 @@ public class Needle extends GameObject {
             }
             else if (quadrant == 0){
                 if (newradius > 200){
-                    radius = newradius;
+                    setRadius(newradius);
                 }
             }
             else if (quadrant == 2){
                 if (newradius < 300){
-                    radius = newradius;
+                    setRadius(newradius);
                 }
             }
 
@@ -91,6 +91,12 @@ public class Needle extends GameObject {
 
     public double getRadius(float x, float y, float x1, float y2){
         return Math.sqrt(Math.pow(x-x1, 2)+Math.pow(y-y2,2));
+    }
+
+    public void setRadius(int radius){
+        this.radius = radius;
+        x = cx + radius * Math.cos(this.angle);
+        y = cy + radius * Math.sin(this.angle);
     }
 
     public int getQuadrant(double a1, double a2){
