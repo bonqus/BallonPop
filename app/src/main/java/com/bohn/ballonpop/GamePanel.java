@@ -30,11 +30,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private long balloonStartTime;
     private long balloonSpawn = 0;
     private Random rand = new Random();
+    private boolean playing;
+    private Score score;
+    private StartScreen ss;
 
-    // gør mindre for højere ballon spawnrate
+    // g    ør mindre for højere ballon spawnrate
     private int level = 4;
 
-    public static int SCORE = 0;
 
     //Increase, to slow down difficulty progression speed.
     private int progressDenom = 20;
@@ -81,6 +83,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         balloons = new ArrayList<Balloon>();
         explosions = new ArrayList<Explosion>();
         needle = new Needle();
+        score = new Score();
+        ss = new StartScreen();
+        playing = false;
         //we can safely start the game loop
         thread.setRunning(true);
         thread.start();
@@ -90,48 +95,57 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-
-        if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            needle.touchDown(event.getX(), event.getY());
-            return true;
-        }
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            needle.touchDown(event.getX(), event.getY());
-            return true;
-        }
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            return true;
+        if(playing) {
+            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                needle.touchDown(event.getX(), event.getY());
+                return true;
+            }
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                needle.touchDown(event.getX(), event.getY());
+                return true;
+            }
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                return true;
+            }
+        } else {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                ss.startUpdate();
+                return true;
+            }
         }
         return super.onTouchEvent(event);
     }
 
     public void update() {
 
+        if (playing) {
+            addBalloon();
 
-        addBalloon();
+            for (int i = balloons.size() - 1; i >= 0; i--) {
+                balloons.get(i).update();
+                if (balloons.get(i).getY() < -200) {
+                    balloons.remove(i);
+                }
+                if (collision(balloons.get(i), needle.getLx(), needle.getLy())) {
+                    explosions.add(new Explosion(balloons.get(i).getX(), balloons.get(i).getY(), balloons.get(i).getColor()));
+                    balloons.remove(i);
+                    score.setScore(score.getScore()+1);
+                    if (score.getScore() % 10 == 0 && level != 0) {
+                        level -= 1;
+                    }
+                }
 
-        for (int i = balloons.size()-1; i >= 0; i--) {
-            balloons.get(i).update();
-            if(balloons.get(i).getY() < -200) {
-                balloons.remove(i);
             }
-            if( collision(balloons.get(i), needle.getLx(), needle.getLy())){
-                explosions.add(new Explosion(balloons.get(i).getX(), balloons.get(i).getY()));
-                balloons.remove(i);
-                SCORE++;
-                if(SCORE % 10 == 0 && level != 0) {
-                    level -= 1;
+            if (explosions.size() > 0) {
+                for (int i = explosions.size() - 1; i >= 0; i--) {
+                    explosions.get(i).update();
+                    if (explosions.get(i).shouldRemove()) {
+                        explosions.remove(i);
+                    }
                 }
             }
-
-        }
-        if (explosions.size() > 0) {
-            for(int i = explosions.size()-1; i >= 0; i--) {
-                explosions.get(i).update();
-                if (explosions.get(i).shouldRemove()) {
-                    explosions.remove(i);
-                }
-        }
+        } else {
+            ss.update();
         }
 
     }
@@ -172,23 +186,33 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             //draw Background
             bg.draw(canvas);
 
-            //draw Balloons
-            for (Balloon b: balloons) {
-                b.draw(canvas);
-            }
+            if(playing) {
+                //draw Balloons
+                for (Balloon b : balloons) {
+                    b.draw(canvas);
+                }
 
-            //draw Explosions
-            if (explosions.size() > 0) {
-                for (Explosion e : explosions) {
-                    e.draw(canvas);
+                //draw Explosions
+                if (explosions.size() > 0) {
+                    for (Explosion e : explosions) {
+                        e.draw(canvas);
+                    }
+                }
+
+                //draw needle
+                needle.draw(canvas);
+
+                //drawScore
+                score.draw(canvas);
+            } else {
+                ss.draw(canvas);
+                if (ss.getY() < -200) {
+                    needle.draw(canvas);
+                    if(needle.onSpot()){
+                        playing = true;
+                    }
                 }
             }
-
-            //draw needle
-            needle.draw(canvas);
-
-            //drawScore
-            Score.DRAW(canvas);
 
             canvas.restoreToCount(savedState);
         }

@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class Explosion extends GameObject{
     ArrayList<ExplosionFragment> explosionFragments;
-    public Explosion(int x, int y) {
+    public Explosion(int x, int y, int color) {
         explosionFragments = new ArrayList<ExplosionFragment>();
         Random rand = new Random();
         for (int i = 0; i < 20; i++) {
@@ -22,7 +22,7 @@ public class Explosion extends GameObject{
 
             super.dx = rand.nextInt(10) - 5;
             super.dy = rand.nextInt(10) - 5;
-            explosionFragments.add(new ExplosionFragment(xA, yA, super.dx, super.dy, r));
+            explosionFragments.add(new ExplosionFragment(xA, yA, super.dx, super.dy, r, color));
         }
     }
 

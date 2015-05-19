@@ -67,4 +67,8 @@ public class Balloon extends GameObject {
         return path;
     }
 
+    public int getColor() {
+        return color;
+    }
+
 }

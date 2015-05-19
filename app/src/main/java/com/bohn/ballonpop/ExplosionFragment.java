@@ -9,12 +9,14 @@ import android.graphics.Paint;
  */
 public class ExplosionFragment extends GameObject {
     float r;
-    public ExplosionFragment(int x, int y, int dx, int dy, float r) {
+    int color;
+    public ExplosionFragment(int x, int y, int dx, int dy, float r, int color) {
         super.dx = dx;
         super.dy = dy;
         super.x = x;
         super.y = y;
         this.r = r;
+        this.color = color;
     }
 
     public float getR() {
@@ -31,7 +33,7 @@ public class ExplosionFragment extends GameObject {
 
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
+        paint.setColor(color);
         paint.setAntiAlias(true);
         canvas.drawCircle(super.x,super.y,this.r,paint);
     }

@@ -26,6 +26,7 @@ public class Needle extends GameObject {
     private double x, y;
     private double lx, ly;
     private float prevx=0, prevy=0;
+    private boolean onSpot;
 
     public Needle() {
         angle = Math.PI/2;
@@ -36,6 +37,7 @@ public class Needle extends GameObject {
         y = cy + radius * Math.sin(angle);
         paint = new Paint();
         paint.setAntiAlias(true);
+        onSpot = true;
     }
 
     public void draw(Canvas canvas) {
@@ -45,8 +47,9 @@ public class Needle extends GameObject {
 
         canvas.drawCircle(cx, cy, 5, paint);
 
-        canvas.drawLine((int)x, (int)y,(int) lx, (int)ly, paint);
+        canvas.drawLine((int) x, (int) y, (int) lx, (int) ly, paint);
     }
+
 
     public void touchDown(float x, float y){
         revangle = getAngle(cx, cy, x, y);
@@ -126,5 +129,10 @@ public class Needle extends GameObject {
 
     public int getLy() {
         return (int)this.ly;
+    }
+
+
+    public boolean onSpot() {
+        return onSpot;
     }
 }
