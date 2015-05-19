@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -19,9 +20,8 @@ import java.util.Random;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
-    public static final int WIDTH = 400;
-    public static final int HEIGHT = 800;
-    public static final int MOVESPEED = -5;
+    public static final int WIDTH = 1440;
+    public static final int HEIGHT = 852;
     private ArrayList<Balloon> balloons;
     private ArrayList<Explosion> explosions;
     private Background bg;
@@ -157,19 +157,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         return false;
     }
 
-    public void drawScore(Canvas canvas) {
-        //AssetManager am = context.getApplicationContext().getAssets();
-        //Typeface tf = Typeface.createFromAsset(am, String.format(Locale.US, "fonts/%s", "abc.ttf"));
 
 
 
-       // Typeface tf = Typeface.createFromAsset(R.getAssets(),fonts.RalewayThin.ttf);
-        Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(Color.WHITE);
-        paint.setTextSize(30);
-        canvas.drawText("Score: " + this.SCORE,this.WIDTH-150,50, paint);
-    }
 
     @Override
     public void draw(Canvas canvas) {
@@ -178,18 +168,28 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if(canvas != null) {
             final int savedState = canvas.save();
             canvas.scale(scaleFactorX, scaleFactorY);
+
+            //draw Background
             bg.draw(canvas);
+
+            //draw Balloons
             for (Balloon b: balloons) {
                 b.draw(canvas);
             }
+
+            //draw Explosions
             if (explosions.size() > 0) {
                 for (Explosion e : explosions) {
                     e.draw(canvas);
                 }
             }
+
+            //draw needle
             needle.draw(canvas);
 
-            drawScore(canvas);
+            //drawScore
+            Score.DRAW(canvas);
+
             canvas.restoreToCount(savedState);
         }
     }

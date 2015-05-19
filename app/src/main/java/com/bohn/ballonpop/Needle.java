@@ -35,15 +35,16 @@ public class Needle extends GameObject {
         x = cx + radius * Math.cos(angle);
         y = cy + radius * Math.sin(angle);
         paint = new Paint();
+        paint.setAntiAlias(true);
     }
 
     public void draw(Canvas canvas) {
         setLinePoint(300);
-        paint.setColor(Color.GREEN);
-        canvas.drawCircle((int)x, (int)y, 40, paint);
-        paint.setColor(Color.BLUE);
-        canvas.drawCircle(cx, cy, 20, paint);
-        paint.setColor(Color.BLACK);
+
+        canvas.drawCircle((int) x, (int) y, 25, paint);
+
+        canvas.drawCircle(cx, cy, 5, paint);
+
         canvas.drawLine((int)x, (int)y,(int) lx, (int)ly, paint);
     }
 
