@@ -29,11 +29,12 @@ public class Needle {
 
     public Needle() {
         this.paint = new Paint();
+        this.paint.setStrokeWidth(2);
         paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);
         pivotX = GamePanel.WIDTH/2;
         pivotY = GamePanel.HEIGHT/2;
-        totalLength = GamePanel.WIDTH/3;
+        totalLength = GamePanel.WIDTH/2;
         this.startX = pivotX;
         this.startY = pivotY-200;
 
@@ -77,6 +78,10 @@ public class Needle {
 
 
         canvas.drawLine(this.startX, this.startY, this.endX ,this.endY , paint);
+    }
+
+    public void setTotalLength(int length) {
+        this.totalLength = length;
     }
 
     public int getLx() {

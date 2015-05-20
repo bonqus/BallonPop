@@ -2,17 +2,45 @@ package com.bohn.ballonpop;
 
 import android.graphics.Canvas;
 
+import com.bohn.ballonpop.buffs.Buffs;
+import com.bohn.ballonpop.buffs.LongerNeedle;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by bohn on 18-05-2015.
  */
-public class Explosion extends GameObject{
+public class ExplosionAndBuff extends GameObject{
     ArrayList<ExplosionFragment> explosionFragments;
-    public Explosion(int x, int y, int color) {
+    private Buffs buff = null;
+
+    // constructor
+    public ExplosionAndBuff(int x, int y, int color) {
+
+
         explosionFragments = new ArrayList<ExplosionFragment>();
         Random rand = new Random();
+
+
+        // chance of buff spawn
+        int choose = rand.nextInt(100);
+        if(choose >= 50) {
+            if (choose > 90) {
+                buff = new LongerNeedle(x, y);
+            } else if (choose > 80) {
+                buff = new LongerNeedle(x, y);
+            } else if (choose > 70) {
+                buff = new LongerNeedle(x, y);
+            } else if (choose > 60) {
+                buff = new LongerNeedle(x, y);
+            } else if (choose >= 50) {
+                buff = new LongerNeedle(x, y);
+            }
+        }
+
+
+        // create all explosions elements
         for (int i = 0; i < 20; i++) {
             int r = rand.nextInt(4) + 1;
 
@@ -27,14 +55,28 @@ public class Explosion extends GameObject{
     }
 
     public void draw(Canvas canvas) {
+
+
+
         for(ExplosionFragment ef: explosionFragments) {
             ef.draw(canvas);
         }
+        if(buff != null) {
+            buff.draw(canvas);
+        }
+
     }
     public void update() {
+
+
+
         for(ExplosionFragment ef: explosionFragments) {
             ef.update();
         }
+        if(buff != null) {
+            buff.update();
+        }
+
     }
 
     public boolean shouldRemove() {
@@ -43,7 +85,11 @@ public class Explosion extends GameObject{
             sum += ef.getR();
         }
         if (sum == 0) {
-            return true;
+            if (buff != null) {
+                return buff.shouldRemove();
+            } else {
+                return true;
+            }
         }
         return false;
     }
