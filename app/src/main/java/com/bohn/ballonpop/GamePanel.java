@@ -159,6 +159,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
+    // Recatangular collision
     public boolean collision (GameObject a, int x, int y) {
         Rect b = new Rect(x,y, x+1, y+1);
         if (Rect.intersects(a.getRectangle(),b)) {
