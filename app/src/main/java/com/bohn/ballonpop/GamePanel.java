@@ -2,7 +2,11 @@ package com.bohn.ballonpop;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Path;
 import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Region;
+import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -31,9 +35,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Score score;
     private StartScreen ss;
 
-    // g    ør mindre for højere ballon spawnrate
+    // gør mindre for højere ballon spawnrate
     private int level = 4;
-
 
     //Increase, to slow down difficulty progression speed.
     private int progressDenom = 20;
@@ -161,8 +164,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     // Recatangular collision
     public boolean collision (GameObject a, int x, int y) {
-        Rect b = new Rect(x,y, x+1, y+1);
-        if (Rect.intersects(a.getRectangle(),b)) {
+        RectF b = new RectF(x,y, x+1, y+1);
+        Path path = new Path();
+        path.addRect(b, Path.Direction.CW);
+        Region clip = new Region(0, 0, WIDTH, HEIGHT);
+
+        Region region1 = new Region();
+        region1.setPath(a.getPath(), clip);
+
+        Region region2 = new Region();
+        region2.setPath(path, clip);
+
+        if (!region1.quickReject(region2) && region1.op(region2, Region.Op.INTERSECT)) {
+            // Collision!
             return true;
         }
         return false;

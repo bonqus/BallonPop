@@ -3,6 +3,7 @@ package com.bohn.ballonpop;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.widget.TextView;
 
 /**
  * Created by bohn on 19-05-2015.

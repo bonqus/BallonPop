@@ -1,5 +1,6 @@
 package com.bohn.ballonpop;
 
+import android.graphics.Path;
 import android.graphics.Rect;
 
 /**
@@ -12,6 +13,7 @@ public abstract class GameObject {
     protected int dx;
     protected int width;
     protected int height;
+    protected Path path;
 
     public void setX (int x) {
         this.x = x;
@@ -60,7 +62,9 @@ public abstract class GameObject {
     public int getHeight() {
         return this.height;
     }
-
+    public Path getPath() {
+        return this.path;
+    }
     public Rect getRectangle() {
         return new Rect(this.x - this.width,this.y - this.height, this.x + this.width, this.y);
     }
