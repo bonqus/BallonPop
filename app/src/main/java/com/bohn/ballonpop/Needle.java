@@ -30,12 +30,10 @@ public class Needle {
     public Needle() {
         this.paint = new Paint();
         paint.setAntiAlias(true);
+        paint.setColor(Color.WHITE);
         pivotX = GamePanel.WIDTH/2;
         pivotY = GamePanel.HEIGHT/2;
-
-        totalLength = 300;
-
-
+        totalLength = GamePanel.WIDTH/3;
         this.startX = pivotX;
         this.startY = pivotY-200;
 
