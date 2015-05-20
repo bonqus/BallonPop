@@ -2,10 +2,7 @@ package com.bohn.ballonpop;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -97,11 +94,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         if(playing) {
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                needle.touchDown(event.getX(), event.getY());
+                needle.touchMove(event.getX(), event.getY());
                 return true;
             }
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                needle.touchDown(event.getX(), event.getY());
                 return true;
             }
             if (event.getAction() == MotionEvent.ACTION_UP) {
