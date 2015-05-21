@@ -3,6 +3,7 @@ package com.bohn.ballonpop;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.widget.TextView;
 
 /**
@@ -21,13 +22,15 @@ public class StartScreen extends GameObject {
 
 
     public void draw(Canvas canvas) {
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/CAVEMAN.TTF");
         Paint paint = new Paint();
+        paint.setTypeface(tf);
         paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);
         paint.setTextSize(50);
         paint.setTextAlign(Paint.Align.CENTER);
 
-        canvas.drawText("balloon pop ", super.x, super.y, paint);
+        canvas.drawText("balloon pop", super.x, super.y, paint);
     }
 
     public void update() {

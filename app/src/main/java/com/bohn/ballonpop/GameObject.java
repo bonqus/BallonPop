@@ -1,7 +1,9 @@
 package com.bohn.ballonpop;
 
+import android.content.Context;
 import android.graphics.Path;
 import android.graphics.Rect;
+import android.view.View;
 
 /**
  * Created by bohn on 13-05-2015.
@@ -14,6 +16,7 @@ public abstract class GameObject {
     protected int width;
     protected int height;
     protected Path path;
+    protected Context context;
 
     public void setX (int x) {
         this.x = x;
@@ -62,9 +65,15 @@ public abstract class GameObject {
     public int getHeight() {
         return this.height;
     }
+
     public Path getPath() {
         return this.path;
     }
+
+    public Context getContext() {
+        return Game.getContext();
+    }
+
     public Rect getRectangle() {
         return new Rect(this.x - this.width,this.y - this.height, this.x + this.width, this.y);
     }
