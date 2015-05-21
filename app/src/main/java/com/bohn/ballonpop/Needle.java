@@ -30,11 +30,12 @@ public class Needle {
 
     public Needle() {
         this.paint = new Paint();
+        this.paint.setStrokeWidth(2);
         paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);
         pivotX = GamePanel.WIDTH/2;
         pivotY = GamePanel.HEIGHT/2;
-        totalLength = GamePanel.WIDTH/3;
+        totalLength = GamePanel.WIDTH/2;
         this.startX = pivotX;
         this.startY = pivotY-200;
 
@@ -86,6 +87,10 @@ public class Needle {
     }
     private double distance(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2)+Math.pow(y2-y1, 2));
+    }
+
+    public void setTotalLength(int length) {
+        this.totalLength = length;
     }
 
     public int getLx() {

@@ -24,7 +24,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static final int WIDTH = 1440;
     public static final int HEIGHT = 852;
     private ArrayList<Balloon> balloons;
-    private ArrayList<Explosion> explosions;
+    private ArrayList<ExplosionAndBuff> explosionsAndBuffs;
     private Background bg;
     private Needle needle;
     private boolean isDown = false;
@@ -81,7 +81,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder){
         bg = new Background(WIDTH, HEIGHT);
         balloons = new ArrayList<Balloon>();
-        explosions = new ArrayList<Explosion>();
+        explosionsAndBuffs = new ArrayList<ExplosionAndBuff>();
         needle = new Needle();
         score = new Score();
         ss = new StartScreen();
@@ -126,7 +126,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                     balloons.remove(i);
                 }
                 if (collision(balloons.get(i), needle.getLx(), needle.getLy())) {
-                    explosions.add(new Explosion(balloons.get(i).getX(), balloons.get(i).getY(), balloons.get(i).getColor()));
+                    explosionsAndBuffs.add(new ExplosionAndBuff(balloons.get(i).getX(), balloons.get(i).getY(), balloons.get(i).getColor()));
                     balloons.remove(i);
                     score.setScore(score.getScore()+1);
                     if (score.getScore() % 10 == 0 && level != 0) {
@@ -135,11 +135,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
 
             }
-            if (explosions.size() > 0) {
-                for (int i = explosions.size() - 1; i >= 0; i--) {
-                    explosions.get(i).update();
-                    if (explosions.get(i).shouldRemove()) {
-                        explosions.remove(i);
+            if (explosionsAndBuffs.size() > 0) {
+                for (int i = explosionsAndBuffs.size() - 1; i >= 0; i--) {
+                    explosionsAndBuffs.get(i).update();
+                    if (explosionsAndBuffs.get(i).shouldRemove()) {
+                        explosionsAndBuffs.remove(i);
                     }
                 }
             }
@@ -204,8 +204,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 }
 
                 //draw Explosions
-                if (explosions.size() > 0) {
-                    for (Explosion e : explosions) {
+                if (explosionsAndBuffs.size() > 0) {
+                    for (ExplosionAndBuff e : explosionsAndBuffs) {
                         e.draw(canvas);
                     }
                 }
