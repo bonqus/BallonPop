@@ -36,7 +36,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private StartScreen ss;
 
     // gør mindre for højere ballon spawnrate
-    private int level = 4;
+    private int level = 0;
 
     //Increase, to slow down difficulty progression speed.
     private int progressDenom = 20;

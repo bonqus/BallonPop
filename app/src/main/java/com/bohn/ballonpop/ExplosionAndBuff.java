@@ -2,8 +2,8 @@ package com.bohn.ballonpop;
 
 import android.graphics.Canvas;
 
-import com.bohn.ballonpop.buffs.Buffs;
-import com.bohn.ballonpop.buffs.LongerNeedle;
+import com.bohn.ballonpop.buffs.*;
+
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class ExplosionAndBuff extends GameObject{
     ArrayList<ExplosionFragment> explosionFragments;
-    private Buffs buff = null;
+    private Buff buff = null;
 
     // constructor
     public ExplosionAndBuff(int x, int y, int color) {
@@ -29,9 +29,9 @@ public class ExplosionAndBuff extends GameObject{
             if (choose > 90) {
                 buff = new LongerNeedle(x, y);
             } else if (choose > 80) {
-                buff = new LongerNeedle(x, y);
+                buff = new ShorterNeedle(x, y);
             } else if (choose > 70) {
-                buff = new LongerNeedle(x, y);
+                buff = new NeedleGun(x, y);
             } else if (choose > 60) {
                 buff = new LongerNeedle(x, y);
             } else if (choose >= 50) {
@@ -67,8 +67,6 @@ public class ExplosionAndBuff extends GameObject{
 
     }
     public void update() {
-
-
 
         for(ExplosionFragment ef: explosionFragments) {
             ef.update();
