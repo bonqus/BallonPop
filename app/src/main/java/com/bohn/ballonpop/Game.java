@@ -1,15 +1,20 @@
 package com.bohn.ballonpop;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 
 public class Game extends Activity {
+
+    private  static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +27,14 @@ public class Game extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(new GamePanel(this));
+
+        context = getApplicationContext();
     }
+
+    public static Context getContext(){
+        return Game.context;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

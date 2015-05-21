@@ -26,6 +26,7 @@ public class Needle {
     private float totalLength;
     private float pivotToStartLength;
     private float pivotToEndLength;
+    private boolean push;
 
     public Needle() {
         this.paint = new Paint();
@@ -40,6 +41,11 @@ public class Needle {
     }
 
     public void touchMove(float x, float y){
+        if (distance(startX, pivotX, startY, pivotY) > distance(x, pivotX, y, pivotY)){
+            push = true;
+        }
+        else { push = false; }
+
         this.startX = x;
         this.startY = y;
     }
@@ -78,11 +84,15 @@ public class Needle {
 
         canvas.drawLine(this.startX, this.startY, this.endX ,this.endY , paint);
     }
+    private double distance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x2 - x1, 2)+Math.pow(y2-y1, 2));
+    }
 
     public int getLx() {
         return (int)endX;
     }
 
+    public boolean getPush() {return push;}
     public int getLy() {
         return (int)endY;
     }
