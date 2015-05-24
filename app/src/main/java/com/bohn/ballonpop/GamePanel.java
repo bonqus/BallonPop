@@ -179,6 +179,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             // Collision!
             return true;
         }
+
+        //SideSpike Collision
+        ArrayList<Region> spikes = needle.getSpikeRegions();
+        for (Region r : spikes){
+            if (!region1.quickReject(r) && region1.op(r, Region.Op.INTERSECT)){
+                return true;
+            }
+        }
         return false;
     }
 
