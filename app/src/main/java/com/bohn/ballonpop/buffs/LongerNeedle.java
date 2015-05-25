@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.bohn.ballonpop.Needle;
+
 /**
  * Created by bohn on 20-05-2015.
  */
@@ -29,9 +31,6 @@ public class LongerNeedle extends Buff {
         canvas.drawLine(super.x, super.y - r/2, super.x, super.y + r/2, paint);
         canvas.drawCircle(super.x,super.y-r/2,5,paint);
     }
-
-
-
 
 
 

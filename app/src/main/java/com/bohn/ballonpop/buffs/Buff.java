@@ -17,11 +17,9 @@ public abstract class Buff extends GameObject {
     public void update () {
         super.y += dy+dy*0.06;
     }
-    public void draw(Canvas canvas) {
-
-    }
-
+    public void draw(Canvas canvas) {}
     public boolean shouldRemove() {
         return super.y > GamePanel.HEIGHT + this.r;
     }
+
 }
