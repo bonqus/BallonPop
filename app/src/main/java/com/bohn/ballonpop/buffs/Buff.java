@@ -24,8 +24,4 @@ public abstract class Buff extends GameObject {
     public boolean shouldRemove() {
         return super.y > GamePanel.HEIGHT + this.r;
     }
-
-    public int getR() {
-        return this.r;
-    }
 }

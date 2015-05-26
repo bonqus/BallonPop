@@ -200,18 +200,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         Region region2 = new Region();
         region2.setPath(path, clip);
 
+        //Standard Needle Collision
         if (!region1.quickReject(region2) && region1.op(region2, Region.Op.INTERSECT) && needle.getPush()) {
             // Collision!
             return true;
         }
 
-        //SideSpike Collision
+        //Buffed Needle Collision
         ArrayList<Region> spikes = needle.getSpikeRegions();
-        for (Region r : spikes){
-            if (!region1.quickReject(r) && region1.op(r, Region.Op.INTERSECT)){
+        for (Region r : spikes) {
+            if (!region1.quickReject(r) && region1.op(r, Region.Op.INTERSECT)) {
                 return true;
+                }
             }
-        }
         return false;
     }
 
