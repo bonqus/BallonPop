@@ -3,10 +3,8 @@ package com.bohn.ballonpop;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
-import android.graphics.Typeface;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -26,7 +24,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private ArrayList<Balloon> balloons;
     private ArrayList<ExplosionAndBuff> explosionsAndBuffs;
     private Background bg;
-    private Needle needle;
+    public static Needle needle;
     private boolean isDown = false;
     private long balloonStartTime;
     private long balloonSpawn = 0;
@@ -34,6 +32,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private boolean playing;
     private Score score;
     private StartScreen ss;
+
+
+    //buffs
+    private boolean fasterBalloons = false;
+    private boolean longerNeedle = false;
+    private boolean needleGun = false;
+    private boolean shortNeedle = false;
+    private boolean sideSpikedNeedle = false;
+    private boolean smallerBalloons = false;
+    private boolean TwoEndedNeedle = false;
+
 
     // gør mindre for højere ballon spawnrate
     private int level = 0;
@@ -119,34 +128,50 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         if (playing) {
             addBalloon();
+            balloonUpdate();
+            explosionsAndBuffsUpdate();
 
-            for (int i = balloons.size() - 1; i >= 0; i--) {
-                balloons.get(i).update();
-                if (balloons.get(i).getY() < -200) {
-                    balloons.remove(i);
-                }
-                if (collision(balloons.get(i), needle.getLx(), needle.getLy())) {
-                    explosionsAndBuffs.add(new ExplosionAndBuff(balloons.get(i).getX(), balloons.get(i).getY(), balloons.get(i).getColor()));
-                    balloons.remove(i);
-                    score.setScore(score.getScore()+1);
-                    if (score.getScore() % 10 == 0 && level != 0) {
-                        level -= 1;
-                    }
-                }
-
-            }
-            if (explosionsAndBuffs.size() > 0) {
-                for (int i = explosionsAndBuffs.size() - 1; i >= 0; i--) {
-                    explosionsAndBuffs.get(i).update();
-                    if (explosionsAndBuffs.get(i).shouldRemove()) {
-                        explosionsAndBuffs.remove(i);
-                    }
-                }
-            }
         } else {
             ss.update();
         }
 
+    }
+
+    public void explosionsAndBuffsUpdate() {
+        // checks if there are any explosions or buffs
+        if (explosionsAndBuffs.size() > 0) {
+            //goes through all explosions and buffs and updates them
+            for (int i = explosionsAndBuffs.size() - 1; i >= 0; i--) {
+                explosionsAndBuffs.get(i).update();
+                if(explosionsAndBuffs.get(i).isBuffActive()){
+                    explosionsAndBuffs.get(i).getBuffLocation().getX();
+                    explosionsAndBuffs.get(i).getBuffLocation().getY();
+                    explosionsAndBuffs.get(i).getBuffLocation().getR();
+
+                }
+                if (explosionsAndBuffs.get(i).shouldRemove()) {
+                    explosionsAndBuffs.remove(i);
+                }
+            }
+        }
+    }
+
+    public void balloonUpdate() {
+        for (int i = balloons.size() - 1; i >= 0; i--) {
+            balloons.get(i).update();
+            if (balloons.get(i).getY() < -200) {
+                balloons.remove(i);
+            }
+            if (collision(balloons.get(i), needle.getLx(), needle.getLy())) {
+                explosionsAndBuffs.add(new ExplosionAndBuff(balloons.get(i).getX(), balloons.get(i).getY(), balloons.get(i).getColor()));
+                balloons.remove(i);
+                score.setScore(score.getScore()+1);
+                if (score.getScore() % 10 == 0 && level != 0) {
+                    level -= 1;
+                }
+            }
+
+        }
     }
 
     public void addBalloon() {

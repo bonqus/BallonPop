@@ -15,18 +15,18 @@ import java.util.Random;
 public class Balloon extends GameObject {
     private int color;
     private int xStart;
-    private Path ballonshape;
+    private Path balloonshape;
 
     public Balloon (int x, int y) {
         super.x = x;
         super.y = y;
         super.width = 45;
         super.height = 110;
-        ballonshape = new Path();
+        balloonshape = new Path();
         Random rand = new Random();
         xStart = rand.nextInt(GamePanel.WIDTH);
         //color = Color.rgb(rand.nextInt(255),rand.nextInt(255),rand.nextInt(255));
-        color = Color.WHITE;
+        color = Color.RED;
         super.dy = rand.nextInt(3)+2;
     }
 
@@ -58,8 +58,8 @@ public class Balloon extends GameObject {
         paint.setStyle(Paint.Style.FILL);
         //Draw Balloon
         canvas.drawCircle(x,y,4,paint);
-        ballonshape = getPath2D();
-        canvas.drawPath(ballonshape, paint);
+        balloonshape = getPath2D();
+        canvas.drawPath(balloonshape, paint);
 
     }
 
@@ -70,7 +70,7 @@ public class Balloon extends GameObject {
         return path;
     }
 
-    public Path getPath() {return ballonshape;}
+    public Path getPath() {return balloonshape;}
 
     public int getColor() {
         return color;

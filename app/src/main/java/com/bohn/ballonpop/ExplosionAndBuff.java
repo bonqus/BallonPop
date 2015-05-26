@@ -3,6 +3,7 @@ package com.bohn.ballonpop;
 import android.graphics.Canvas;
 
 import com.bohn.ballonpop.buffs.*;
+import com.bohn.ballonpop.smartClasses.PositionSize;
 
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Random;
 public class ExplosionAndBuff extends GameObject{
     ArrayList<ExplosionFragment> explosionFragments;
     private Buff buff = null;
+    private boolean activeBuff = false;
 
     // constructor
     public ExplosionAndBuff(int x, int y, int color) {
@@ -26,6 +28,7 @@ public class ExplosionAndBuff extends GameObject{
         // chance of buff spawn
         int choose = rand.nextInt(100);
         if(choose >= 50) {
+            activeBuff = true;
             if (choose > 90) {
                 buff = new LongerNeedle(x, y);
             } else if (choose > 80) {
@@ -90,6 +93,14 @@ public class ExplosionAndBuff extends GameObject{
             }
         }
         return false;
+    }
+
+    public PositionSize getBuffLocation() {
+        return new PositionSize(buff.getX(), buff.getY(), buff.getR());
+    }
+
+    public boolean isBuffActive() {
+        return activeBuff;
     }
 
 }

@@ -22,12 +22,12 @@ public class StartScreen extends GameObject {
 
 
     public void draw(Canvas canvas) {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/CAVEMAN.TTF");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/RalewayThin.ttf");
         Paint paint = new Paint();
         paint.setTypeface(tf);
         paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);
-        paint.setTextSize(50);
+        paint.setTextSize(super.x/10);
         paint.setTextAlign(Paint.Align.CENTER);
 
         canvas.drawText("balloon pop", super.x, super.y, paint);
@@ -36,8 +36,7 @@ public class StartScreen extends GameObject {
     public void update() {
         if (update) {
             super.y -= dy;
-            dy = (dx*dx)/50;
-            dx += 1;
+            dy+=3;
         }
     }
 

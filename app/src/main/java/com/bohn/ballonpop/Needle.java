@@ -41,7 +41,7 @@ public class Needle {
         this.paint = new Paint();
         this.paint.setStrokeWidth(2);
         paint.setAntiAlias(true);
-        paint.setColor(Color.WHITE);
+        paint.setColor(Color.BLACK);
         pivotX = GamePanel.WIDTH/2;
         pivotY = GamePanel.HEIGHT/2;
         totalLength = GamePanel.WIDTH/2;
@@ -100,9 +100,8 @@ public class Needle {
         return Math.sqrt(Math.pow(x2 - x1, 2)+Math.pow(y2-y1, 2));
     }
 
-    public void setTotalLength(int length) {
-        this.totalLength = length;
-    }
+
+
 
     public int getLx() {
         return (int)endX;
@@ -170,5 +169,25 @@ public class Needle {
         }
 
         return spikeRegions;
+    }
+
+/*
+    Buff relevant stuff
+            ;;;;;
+            ;;;;;
+            ;;;;;
+            ;;;;;
+            ;;;;;
+          ..;;;;;..
+           ':::::'
+             ':`
+*/
+
+    public void setTotalLength(int length) {
+        this.totalLength = length;
+    }
+
+    public int getTotalLength() {
+        return (int)this.totalLength;
     }
 }
