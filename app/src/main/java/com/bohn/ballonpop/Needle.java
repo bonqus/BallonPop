@@ -33,16 +33,16 @@ public class Needle {
     private float pivotToStartLength;
     private float pivotToEndLength;
     private boolean push;
-    public boolean spikes, mirror;
-    private float SpikeX, SpikeY, SpikeXend, SpikeYend, px, py;
-    private float Spike1X, Spike1Y, Spike1Xend, Spike1Yend;
-    private float Spike2X, Spike2Y, Spike2Xend, Spike2Yend;
-    private float Spike3X, Spike3Y, Spike3Xend, Spike3Yend;
+    public boolean spikes, mirror, gun;
+    private float px, py;
     private ArrayList<Region> spikeRegions;
     private ArrayList<RectF> Rects;
+    private ArrayList<Lines> lines, needleGun;
     private CountDownTimer spikeCountDown, mirrorCountDown;
 
     public Needle() {
+        lines = new ArrayList<>();
+        needleGun = new ArrayList<>();
         spikeCountDown = new CountDownTimer(10000, 10000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -77,9 +77,11 @@ public class Needle {
 
     }
 
+    public void shoot(){
+        gun = true;
+        needleGun();
+    }
     public void touchMove(float x, float y){
-        activateMirror();
-        activateSpikes();
 
         if (distance(startX, pivotX, startY, pivotY) > distance(x, pivotX, y, pivotY)){
             push = true;
@@ -120,15 +122,16 @@ public class Needle {
         this.endY = (endY*relation) + pivotY;
 
         canvas.drawLine(this.startX, this.startY, this.endX, this.endY, paint);
-
         if (spikes) {
             sideSpikes();
-            canvas.drawLine(this.SpikeX, this.SpikeY, this.SpikeXend, this.SpikeYend, paint);
-            canvas.drawLine(this.Spike1X, this.Spike1Y, this.Spike1Xend, this.Spike1Yend, paint);
-            if (mirror){
-                sideSpikes();
-                canvas.drawLine(this.Spike2X, this.Spike2Y, this.Spike2Xend, this.Spike2Yend, paint);
-                canvas.drawLine(this.Spike3X, this.Spike3Y, this.Spike3Xend, this.Spike3Yend, paint);
+            for (Lines l : lines) {
+                canvas.drawLine(l.getX(), l.getY(), l.getX1(), l.getY1(), paint);
+            }
+        }
+        if(gun){
+            for (Lines l : needleGun){
+                l.update();
+                canvas.drawLine(l.getX(), l.getY(), l.getX1(), l.getY1(), paint);
             }
         }
     }
@@ -136,9 +139,6 @@ public class Needle {
     private double distance(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2)+Math.pow(y2-y1, 2));
     }
-
-
-
 
     public int getLx() {
         return (int)endX;
@@ -169,39 +169,30 @@ public class Needle {
         spikes = true;
         spikeCountDown.start();
     }
+
     public void sideSpikes(){
         float slope = (this.startY-this.endY)/(this.startX-this.endX);
         float m = -1/slope;
         int l = 100;
         float r =(float) Math.sqrt(1+m*m);
+        lines = new ArrayList<>();
 
         //Spike 1
         line_point(this.startX, this.startY, this.endX, this.endY, -50);
-        SpikeX = px+l/r;
-        SpikeY = py+(l*m)/r;
-        SpikeXend = px-l/r;
-        SpikeYend = py+(-l*m)/r;
+        lines.add(new Lines(px+l/r, py+(l*m)/r, px-l/r, py+(-l*m)/r));
 
         //Spike 2
         line_point(this.startX, this.startY, this.endX, this.endY, -100);
-        Spike1X = px+l/r;
-        Spike1Y = py+(l*m)/r;
-        Spike1Xend = px-l/r;
-        Spike1Yend = py+(-l*m)/r;
+        lines.add(new Lines(px+l/r, py+(l*m)/r, px-l/r, py+(-l*m)/r));
+
         if (mirror) {
             //Spike 3
             line_point(this.startX, this.startY, this.endX, this.endY, -650);
-            Spike2X = px + l / r;
-            Spike2Y = py + (l * m) / r;
-            Spike2Xend = px - l / r;
-            Spike2Yend = py + (-l * m) / r;
+            lines.add(new Lines(px+l/r, py+(l*m)/r, px-l/r, py+(-l*m)/r));
 
             //Spike 4
             line_point(this.startX, this.startY, this.endX, this.endY, -700);
-            Spike3X = px + l / r;
-            Spike3Y = py + (l * m) / r;
-            Spike3Xend = px - l / r;
-            Spike3Yend = py + (-l * m) / r;
+            lines.add(new Lines(px+l/r, py+(l*m)/r, px-l/r, py+(-l*m)/r));
         }
     }
 
@@ -215,29 +206,22 @@ public class Needle {
         py = (int)((float)y1 + vy * (mag + distance));
     }
 
+    public void needleGun(){
+        line_point(this.startX, this.startY, this.endX, this.endY, -50);
+        needleGun.add(new Lines(px, py, this.endX, this.endY));
+    }
+
     public ArrayList getSpikeRegions(){
         Region clip = new Region(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
         spikeRegions = new ArrayList<Region>();
         Rects = new ArrayList<RectF>();
 
         if (spikes) {
-            RectF b1 = new RectF(this.SpikeX, this.SpikeY, this.SpikeX + 1, this.SpikeY + 1);
-            RectF b2 = new RectF(this.Spike1X, this.Spike1Y, this.Spike1X + 1, this.Spike1Y + 1);
-            RectF b3 = new RectF(this.SpikeXend, this.SpikeYend, this.SpikeXend + 1, this.SpikeYend + 1);
-            RectF b4 = new RectF(this.Spike1Xend, this.Spike1Yend, this.Spike1Xend + 1, this.Spike1Yend + 1);
-            Rects.add(b1);
-            Rects.add(b2);
-            Rects.add(b3);
-            Rects.add(b4);
-            if (mirror){
-                RectF b6 = new RectF(this.Spike2X, this.Spike2Y, this.Spike2X + 1, this.Spike2Y + 1);
-                RectF b7 = new RectF(this.Spike3X, this.Spike3Y, this.Spike3X + 1, this.Spike3Y + 1);
-                RectF b8 = new RectF(this.Spike2Xend, this.Spike2Yend, this.Spike2Xend + 1, this.Spike2Yend + 1);
-                RectF b9 = new RectF(this.Spike3Xend, this.Spike3Yend, this.Spike3Xend + 1, this.Spike3Yend + 1);
-                Rects.add(b6);
-                Rects.add(b7);
-                Rects.add(b8);
-                Rects.add(b9);
+            for (Lines l : lines){
+                RectF b = new RectF(l.getX(), l.getY(), l.getX()+1, l.getY()+1);
+                RectF b1 = new RectF(l.getX1(), l.getY1(), l.getX1()+1, l.getY1()+1);
+                Rects.add(b);
+                Rects.add(b1);
             }
         }
         if (mirror){
