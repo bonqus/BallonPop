@@ -33,16 +33,50 @@ public class Needle {
     private float pivotToStartLength;
     private float pivotToEndLength;
     private boolean push;
-    public boolean spikes, mirror, gun;
+    public boolean spikes, mirror, gun, smaller, longer;
     private float px, py;
     private ArrayList<Region> spikeRegions;
     private ArrayList<RectF> Rects;
-    private ArrayList<Lines> lines, needleGun;
-    private CountDownTimer spikeCountDown, mirrorCountDown;
+    private ArrayList<Lines> lines;
+    public ArrayList<Lines> needleGun;
+    private CountDownTimer spikeCountDown, mirrorCountDown, gunCountDown, smallCountDown, longCountDown;
 
     public Needle() {
         lines = new ArrayList<>();
         needleGun = new ArrayList<>();
+        longCountDown = new CountDownTimer(10000, 10000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                return;
+            }
+
+            @Override
+            public void onFinish() {
+                longer = false;
+            }
+        };
+        smallCountDown = new CountDownTimer(10000, 10000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                return;
+            }
+
+            @Override
+            public void onFinish() {
+                smaller = false;
+            }
+        };
+        gunCountDown = new CountDownTimer(10000, 10000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                return;
+            }
+
+            @Override
+            public void onFinish() {
+                gun = false;
+            }
+        };
         spikeCountDown = new CountDownTimer(10000, 10000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -77,12 +111,7 @@ public class Needle {
 
     }
 
-    public void shoot(){
-        gun = true;
-        needleGun();
-    }
     public void touchMove(float x, float y){
-
         if (distance(startX, pivotX, startY, pivotY) > distance(x, pivotX, y, pivotY)){
             push = true;
         }
@@ -116,10 +145,19 @@ public class Needle {
 
         this.endX = -1*(startX-pivotX);
         this.endY = -1*(startY-pivotY);
-
-
         this.endX = (endX*relation) + pivotX;
         this.endY = (endY*relation) + pivotY;
+
+        if(smaller){
+            line_point(this.startX, this.startY, this.endX, this.endY, -150);
+            this.endX = px;
+            this.endY = py;
+        }
+        else if (longer){
+            line_point(this.startX, this.startY, this.endX, this.endY, 150);
+            this.endX = px;
+            this.endY = py;
+        }
 
         canvas.drawLine(this.startX, this.startY, this.endX, this.endY, paint);
         if (spikes) {
@@ -154,6 +192,18 @@ public class Needle {
         return true;
     }
 
+    public void shoot(){
+        needleGun();
+    }
+
+    public void activateGun(){
+        if (gun){
+            gunCountDown.cancel();
+        }
+        gun = true;
+        gunCountDown.start();
+    }
+
     public void activateMirror(){
         if (mirror){
             mirrorCountDown.cancel();
@@ -170,28 +220,61 @@ public class Needle {
         spikeCountDown.start();
     }
 
+    public void activateSmaller(){
+        if (longer){
+            longer = false;
+            longCountDown.cancel();
+        }
+        else {
+            if (smaller) {
+                smallCountDown.cancel();
+            }
+            smaller = true;
+            smallCountDown.start();
+        }
+    }
+
+    public void activateLonger(){
+        if (smaller){
+            smaller = false;
+            smallCountDown.cancel();
+        }
+        else {
+            if (longer) {
+                longCountDown.cancel();
+            }
+            longer = true;
+            longCountDown.start();
+        }
+    }
+
     public void sideSpikes(){
         float slope = (this.startY-this.endY)/(this.startX-this.endX);
         float m = -1/slope;
         int l = 100;
         float r =(float) Math.sqrt(1+m*m);
         lines = new ArrayList<>();
-
+        if (longer){
+            l = 140;
+        }
+        else if (smaller){
+            l = 60;
+        }
         //Spike 1
         line_point(this.startX, this.startY, this.endX, this.endY, -50);
         lines.add(new Lines(px+l/r, py+(l*m)/r, px-l/r, py+(-l*m)/r));
 
         //Spike 2
         line_point(this.startX, this.startY, this.endX, this.endY, -100);
-        lines.add(new Lines(px+l/r, py+(l*m)/r, px-l/r, py+(-l*m)/r));
+        lines.add(new Lines(px + l / r, py + (l * m) / r, px - l / r, py + (-l * m) / r));
 
         if (mirror) {
             //Spike 3
-            line_point(this.startX, this.startY, this.endX, this.endY, -650);
+            line_point(this.endX, this.endY, this.startX, this.startY, -50);
             lines.add(new Lines(px+l/r, py+(l*m)/r, px-l/r, py+(-l*m)/r));
 
             //Spike 4
-            line_point(this.startX, this.startY, this.endX, this.endY, -700);
+            line_point(this.endX, this.endY, this.startX, this.startY, -100);
             lines.add(new Lines(px+l/r, py+(l*m)/r, px-l/r, py+(-l*m)/r));
         }
     }
@@ -207,14 +290,32 @@ public class Needle {
     }
 
     public void needleGun(){
-        line_point(this.startX, this.startY, this.endX, this.endY, -50);
+        int len = -50;
+        line_point(this.startX, this.startY, this.endX, this.endY, len);
         needleGun.add(new Lines(px, py, this.endX, this.endY));
+        if (spikes){
+            for (Lines l : lines){
+                line_point(l.getX(), l.getY(), l.getX1(), l.getY1(), len);
+                needleGun.add(new Lines(px, py, l.getX(), l.getY()));
+                needleGun.add(new Lines(px, py, l.getX1(), l.getY1()));
+            }
+        }
+        if (mirror){
+            line_point(this.endX, this.endY, this.startX, this.startY, len);
+            needleGun.add(new Lines(px, py, this.startX, this.startY));
+        }
     }
 
     public ArrayList getSpikeRegions(){
         Region clip = new Region(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
         spikeRegions = new ArrayList<Region>();
         Rects = new ArrayList<RectF>();
+        if (gun){
+            for (Lines l : needleGun){
+                RectF b = new RectF(l.getX1(), l.getY1(), l.getX1()+1, l.getY1()+1);
+                Rects.add(b);
+            }
+        }
 
         if (spikes) {
             for (Lines l : lines){

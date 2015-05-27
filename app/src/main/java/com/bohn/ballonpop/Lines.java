@@ -17,7 +17,14 @@ public class Lines {
     public float getY1(){return this.y1;}
 
     public void update(){
-        line_point(this.x, this.y, this.x1, this.y1, -40);
+        int len = -40;
+        if (GamePanel.needle.smaller){
+            len = -20;
+        }
+        else if (GamePanel.needle.longer){
+            len = -60;
+        }
+        line_point(this.x, this.y, this.x1, this.y1, len);
         this.x = px;
         this.y = py;
         line_point(this.x, this.y, this.x1, this.y1, 10);
@@ -33,5 +40,9 @@ public class Lines {
         vy /= mag;
         px = (int)((float)x1 + vx * (mag + distance));
         py = (int)((float)y1 + vy * (mag + distance));
+    }
+
+    public boolean shouldRemove() {
+        return (this.y > GamePanel.HEIGHT + 50) || (this.y < 0) || this.x > GamePanel.WIDTH+50 || this.x < 0;
     }
 }

@@ -45,10 +45,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
     // gør mindre for højere ballon spawnrate
-    private int level = 0;
-
+    private int level;
     //Increase, to slow down difficulty progression speed.
     private int progressDenom = 20;
+
 
     private MainThread thread;
 
@@ -113,7 +113,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 return true;
             }
             if (event.getAction() == MotionEvent.ACTION_UP) {
-                needle.shoot();
+                if (needle.gun) {
+                    needle.shoot();
+                }
                 return true;
             }
         } else {
@@ -130,6 +132,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (playing) {
             addBalloon();
             balloonUpdate();
+            needleGunUpdate();
             explosionsAndBuffsUpdate();
 
         } else {
@@ -156,7 +159,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
-
+    public void needleGunUpdate(){
+        for (int i = needle.needleGun.size() - 1; i >= 0; i--) {
+            if (needle.needleGun.get(i).shouldRemove()){
+                needle.needleGun.remove(i);
+            }
+        }
+    }
     public void balloonUpdate() {
         for (int i = balloons.size() - 1; i >= 0; i--) {
             balloons.get(i).update();
@@ -202,7 +211,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         region2.setPath(path, clip);
 
         //Standard Needle Collision
-        if (!region1.quickReject(region2) && region1.op(region2, Region.Op.INTERSECT) && needle.getPush()) {
+        if (!region1.quickReject(region2) && region1.op(region2, Region.Op.INTERSECT)) {
             // Collision!
             return true;
         }
