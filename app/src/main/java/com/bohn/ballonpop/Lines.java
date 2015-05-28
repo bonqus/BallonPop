@@ -5,7 +5,10 @@ package com.bohn.ballonpop;
  */
 public class Lines {
     private float x, y, x1, y1, px, py;
+    private float tmpx, tmpy;
     public Lines(float x, float y, float x1, float y1){
+        tmpx = x;
+        tmpy = y;
         this.x = x;
         this.y = y;
         this.x1 = x1;
@@ -17,17 +20,11 @@ public class Lines {
     public float getY1(){return this.y1;}
 
     public void update(){
-        int len = -10;
-        if (GamePanel.needle.smaller){
-            len = -5;
-        }
-        else if (GamePanel.needle.longer){
-            len = -15;
-        }
-        line_point(this.x, this.y, this.x1, this.y1, len);
-        this.x = px;
-        this.y = py;
-        line_point(this.x, this.y, this.x1, this.y1, 10);
+        int len = -20;
+
+        line_point(tmpx, tmpy, this.x1, this.y1, 20);
+        this.x = this.x1;
+        this.y = this.y1;
         this.x1 = px;
         this.y1 = py;
     }

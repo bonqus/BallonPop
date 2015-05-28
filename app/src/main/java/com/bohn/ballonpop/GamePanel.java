@@ -23,14 +23,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static final int HEIGHT = 852;
     private ArrayList<Balloon> balloons;
     private ArrayList<ExplosionAndBuff> explosionsAndBuffs;
+    private ArrayList<lives> lifeballoons;
     private Background bg;
     public static Needle needle;
     private boolean isDown = false;
     private long balloonStartTime;
     private long balloonSpawn = 0;
     private Random rand = new Random();
-    private boolean playing;
+    private boolean playing, stop;
     private Score score;
+    public int lives = 3;
     private StartScreen ss;
 
 
@@ -91,6 +93,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         bg = new Background(WIDTH, HEIGHT);
         balloons = new ArrayList<Balloon>();
         explosionsAndBuffs = new ArrayList<ExplosionAndBuff>();
+        lifeballoons = new ArrayList<>();
+        for (int i = 0; i < 3; i++){
+            lifeballoons.add(new lives(i*100+50, 120));
+        }
         needle = new Needle();
         score = new Score();
         ss = new StartScreen();
@@ -104,7 +110,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if(playing) {
+        if(playing && !stop) {
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
                 needle.touchMove(event.getX(), event.getY());
                 return true;
@@ -172,8 +178,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void balloonUpdate() {
         for (int i = balloons.size() - 1; i >= 0; i--) {
             balloons.get(i).update();
-            if (balloons.get(i).getY() < -200) {
+            if (balloons.get(i).getY() < -120) {
+                lives -= 1;
                 balloons.remove(i);
+                if (lives < 1){stop = true; playing = false;}
             }
             if (collision(balloons.get(i))) {
                 explosionsAndBuffs.add(new ExplosionAndBuff(balloons.get(i).getX(), balloons.get(i).getY(), balloons.get(i).getColor()));
@@ -258,6 +266,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                         e.draw(canvas);
                     }
                 }
+                //draw lives
+                for (int i = lives-1; i >= 0; i--){
+                    lifeballoons.get(i).draw(canvas);
+                }
 
                 //draw needle
                 needle.draw(canvas);
@@ -269,7 +281,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 if (ss.getY() < -200) {
                     needle.draw(canvas);
                     if(needle.onSpot()){
-                        playing = true;
+                        if (!stop){playing = true;};
                     }
                 }
             }
