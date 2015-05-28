@@ -288,19 +288,19 @@ public class Needle {
     }
 
     public void needleGun(){
-        int len = -50;
+        int len = 10;
         line_point(this.startX, this.startY, this.endX, this.endY, len);
-        needleGun.add(new Lines(px, py, this.endX, this.endY));
+        needleGun.add(new Lines(this.endX, this.endY, px, py));
         if (spikes){
             for (Lines l : lines){
                 line_point(l.getX(), l.getY(), l.getX1(), l.getY1(), len);
-                needleGun.add(new Lines(px, py, l.getX(), l.getY()));
-                needleGun.add(new Lines(px, py, l.getX1(), l.getY1()));
+                needleGun.add(new Lines(l.getX(), l.getY(), px, py));
+                needleGun.add(new Lines(l.getX1(), l.getY1(), px, py));
             }
         }
         if (mirror){
             line_point(this.endX, this.endY, this.startX, this.startY, len);
-            needleGun.add(new Lines(px, py, this.startX, this.startY));
+            needleGun.add(new Lines(this.startX, this.startY, px, py));
         }
     }
 
