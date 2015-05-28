@@ -17,12 +17,12 @@ public class Lines {
     public float getY1(){return this.y1;}
 
     public void update(){
-        int len = -40;
+        int len = -10;
         if (GamePanel.needle.smaller){
-            len = -20;
+            len = -5;
         }
         else if (GamePanel.needle.longer){
-            len = -60;
+            len = -15;
         }
         line_point(this.x, this.y, this.x1, this.y1, len);
         this.x = px;
