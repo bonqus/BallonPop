@@ -147,18 +147,20 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             //goes through all explosions and buffs and updates them
             for (int i = explosionsAndBuffs.size() - 1; i >= 0; i--) {
                 explosionsAndBuffs.get(i).update();
-                if(explosionsAndBuffs.get(i).isBuffActive()){
-                    explosionsAndBuffs.get(i).getBuffLocation().getX();
-                    explosionsAndBuffs.get(i).getBuffLocation().getY();
-                    explosionsAndBuffs.get(i).getBuffLocation().getR();
 
+                // Buff update and collision
+                if(explosionsAndBuffs.get(i).isBuffActive() && collision(explosionsAndBuffs.get(i))){
+                    explosionsAndBuffs.get(i).activateBuff();
                 }
+
+                // Remove ExplosionAndBuff from list
                 if (explosionsAndBuffs.get(i).shouldRemove()) {
                     explosionsAndBuffs.remove(i);
                 }
             }
         }
     }
+
     public void needleGunUpdate(){
         for (int i = needle.needleGun.size() - 1; i >= 0; i--) {
             if (needle.needleGun.get(i).shouldRemove()){
@@ -166,13 +168,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
+
     public void balloonUpdate() {
         for (int i = balloons.size() - 1; i >= 0; i--) {
             balloons.get(i).update();
             if (balloons.get(i).getY() < -200) {
                 balloons.remove(i);
             }
-            if (collision(balloons.get(i), needle.getLx(), needle.getLy())) {
+            if (collision(balloons.get(i))) {
                 explosionsAndBuffs.add(new ExplosionAndBuff(balloons.get(i).getX(), balloons.get(i).getY(), balloons.get(i).getColor()));
                 balloons.remove(i);
                 score.setScore(score.getScore()+1);
@@ -197,8 +200,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-    // Recatangular collision
-    public boolean collision (GameObject a, int x, int y) {
+    // Needle collides with GameObject
+    public boolean collision (GameObject a) {
+        int x = needle.getLx();
+        int y = needle.getLy();
         RectF b = new RectF(x,y, x+1, y+1);
         Path path = new Path();
         path.addRect(b, Path.Direction.CW);

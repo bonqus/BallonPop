@@ -1,6 +1,7 @@
 package com.bohn.ballonpop;
 
 import android.graphics.Canvas;
+import android.graphics.Path;
 
 import com.bohn.ballonpop.buffs.*;
 import com.bohn.ballonpop.smartClasses.PositionSize;
@@ -17,10 +18,10 @@ public class ExplosionAndBuff extends GameObject{
     private Buff buff = null;
     private boolean activeBuff = false;
 
+
+
     // constructor
     public ExplosionAndBuff(int x, int y, int color) {
-
-
         explosionFragments = new ArrayList<ExplosionFragment>();
         Random rand = new Random();
 
@@ -95,12 +96,16 @@ public class ExplosionAndBuff extends GameObject{
         return false;
     }
 
-    public PositionSize getBuffLocation() {
-        return new PositionSize(buff.getX(), buff.getY(), buff.getR());
+    public Path getPath() {
+        return buff.getPath();
     }
 
     public boolean isBuffActive() {
         return activeBuff;
     }
 
+    public void activateBuff() {
+        buff.activate();
+        buff.remove();
+    }
 }

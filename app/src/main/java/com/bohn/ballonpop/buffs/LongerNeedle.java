@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.bohn.ballonpop.GamePanel;
+
 /**
  * Created by bohn on 20-05-2015.
  */
@@ -26,8 +28,12 @@ public class LongerNeedle extends Buff {
         super.paint.setColor(Color.BLACK);
         canvas.drawCircle(super.x, super.y, super.r, super.paint);
         super.paint.setColor(Color.rgb(199, 233, 245));
-        canvas.drawLine(super.x, super.y - r/2, super.x, super.y + r/2, paint);
-        canvas.drawCircle(super.x,super.y-r/2,5,paint);
+        canvas.drawLine(super.x, super.y - r / 2, super.x, super.y + r / 2, paint);
+        canvas.drawCircle(super.x, super.y - r / 2, 5, paint);
+    }
+
+    public void activate() {
+        GamePanel.needle.setTotalLength(GamePanel.needle.getTotalLength()+(GamePanel.WIDTH/5));
     }
 
 
