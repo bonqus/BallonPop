@@ -64,6 +64,7 @@ public class Needle {
 
             @Override
             public void onFinish() {
+                setTotalLength(getTotalLength()+150);
                 smaller = false;
             }
         };
@@ -113,6 +114,7 @@ public class Needle {
     }
 
     public void touchMove(float x, float y){
+        activateGun();
         if (distance(startX, pivotX, startY, pivotY) > distance(x, pivotX, y, pivotY)){
             push = true;
         }
@@ -155,11 +157,10 @@ public class Needle {
                 canvas.drawLine(l.getX(), l.getY(), l.getX1(), l.getY1(), paint);
             }
         }
-        if(gun){
-            for (Lines l : needleGun){
-                l.update();
-                canvas.drawLine(l.getX(), l.getY(), l.getX1(), l.getY1(), paint);
-            }
+
+        for (Lines l : needleGun){
+            l.update();
+            canvas.drawLine(l.getX(), l.getY(), l.getX1(), l.getY1(), paint);
         }
     }
 
