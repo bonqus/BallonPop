@@ -11,7 +11,7 @@ import com.bohn.ballonpop.GamePanel;
  * Created by bohn on 21-05-2015.
  */
 public abstract class Buff extends GameObject {
-    protected int r = 40;
+    protected int r = 30;
     protected Paint paint;
     protected double dy = 5;
     protected boolean remove = false;
