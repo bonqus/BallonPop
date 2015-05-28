@@ -52,6 +52,7 @@ public class Needle {
 
             @Override
             public void onFinish() {
+                setTotalLength(getTotalLength()-150);
                 longer = false;
             }
         };
@@ -138,7 +139,6 @@ public class Needle {
         // pivot circle
         canvas.drawCircle(pivotX, pivotY, 5, paint);
 
-
         pivotToEndLength = totalLength-pivotToStartLength;
 
         float relation = pivotToEndLength/pivotToStartLength;
@@ -147,17 +147,6 @@ public class Needle {
         this.endY = -1*(startY-pivotY);
         this.endX = (endX*relation) + pivotX;
         this.endY = (endY*relation) + pivotY;
-
-        if(smaller){
-            line_point(this.startX, this.startY, this.endX, this.endY, -150);
-            this.endX = px;
-            this.endY = py;
-        }
-        else if (longer){
-            line_point(this.startX, this.startY, this.endX, this.endY, 150);
-            this.endX = px;
-            this.endY = py;
-        }
 
         canvas.drawLine(this.startX, this.startY, this.endX, this.endY, paint);
         if (spikes) {
@@ -223,11 +212,15 @@ public class Needle {
     public void activateSmaller(){
         if (longer){
             longer = false;
+            setTotalLength(getTotalLength()-150);
             longCountDown.cancel();
         }
         else {
             if (smaller) {
                 smallCountDown.cancel();
+            }
+            else {
+                setTotalLength(getTotalLength()-150);
             }
             smaller = true;
             smallCountDown.start();
@@ -237,11 +230,15 @@ public class Needle {
     public void activateLonger(){
         if (smaller){
             smaller = false;
+            setTotalLength(getTotalLength()+150);
             smallCountDown.cancel();
         }
         else {
             if (longer) {
                 longCountDown.cancel();
+            }
+            else {
+                setTotalLength(getTotalLength()+150);
             }
             longer = true;
             longCountDown.start();

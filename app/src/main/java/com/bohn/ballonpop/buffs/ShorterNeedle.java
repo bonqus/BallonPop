@@ -32,7 +32,7 @@ public class ShorterNeedle extends Buff {
     }
 
     public void activate() {
-        GamePanel.needle.setTotalLength(GamePanel.needle.getTotalLength()-(GamePanel.WIDTH/5));
+        GamePanel.needle.activateSmaller();
     }
 
 

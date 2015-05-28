@@ -37,9 +37,9 @@ public class ExplosionAndBuff extends GameObject{
             } else if (choose > 70) {
                 buff = new NeedleGun(x, y);
             } else if (choose > 60) {
-                buff = new LongerNeedle(x, y);
+                buff = new TwoEndedNeedle(x, y);
             } else if (choose >= 50) {
-                buff = new LongerNeedle(x, y);
+                buff = new SideSpikedNeedle(x, y);
             }
         }
 

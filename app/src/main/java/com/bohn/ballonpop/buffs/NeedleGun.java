@@ -4,6 +4,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import com.bohn.ballonpop.GamePanel;
+
 /**
  * Created by bohn on 20-05-2015.
  */
@@ -29,7 +31,9 @@ public class NeedleGun extends Buff {
         canvas.drawCircle(super.x,super.y-r+15,5,paint);
     }
 
-
+    public void activate(){
+        GamePanel.needle.activateGun();
+    }
 
 
 }
