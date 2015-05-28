@@ -4,8 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Path;
 
 import com.bohn.ballonpop.buffs.*;
-import com.bohn.ballonpop.smartClasses.PositionSize;
-
 
 import java.util.ArrayList;
 import java.util.Random;
